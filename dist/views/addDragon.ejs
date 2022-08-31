@@ -1,0 +1,19 @@
+<%- include('header'); -%>
+<%- include('navbar'); -%>
+
+<body>
+    <main style="margin:15%">
+        <form method="post" action="addDragon" >
+            <fieldset>
+                <legend>Create Dragon</legend>
+                <div class="mb-3">
+                    <label for="disabledTextInput" class="form-label">Name</label>
+                    <input type="text" id="name" name="name" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </fieldset>
+        </form>
+    </main>
+    <%- include('footer'); -%>
+</body>
+

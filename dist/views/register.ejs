@@ -1,0 +1,31 @@
+<%- include('header'); -%>
+<%- include('navbar'); -%>
+
+<body>
+    <main style="margin:15%">
+        <form method="post" action="register" >
+            <fieldset>
+            <legend>Register Form</legend>
+            <div class="mb-3">
+                <label for="disabledTextInput" class="form-label">Login</label>
+                <input type="text" id="login" name="login" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="disabledSelect" class="form-label">Password</label>
+                <input type="password" id="password" name="password" class="form-control">
+            </div>
+            <div class="mb-3">
+                <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="disabledFieldsetCheck" disabled>
+                <label class="form-check-label" for="disabledFieldsetCheck">
+                    Can't check this
+                </label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+            </fieldset>
+        </form>
+    </main>
+    <%- include('footer'); -%>
+</body>
+

@@ -1,7 +1,13 @@
 import express, { Express, Request, Response } from 'express';
 import path from "path";
 import { IDragons } from "./interfaces/IDragon"
-const { getAllDragons } = require("./model/dragons")
+import { IObjects } from './interfaces/IObject';
+import { addUser } from './model/users';
+// import { Dragon } from "./class/DragonClass"
+
+const { getAllDragons,getById,addDragon } = require("./model/dragons")
+const { getUsers }= require("./model/users")
+var cookieSession = require("cookie-session")
 
 // const dotenv = require('dotenv');
 // dotenv.config();
@@ -11,11 +17,133 @@ const port = 3000;
 
 app.set( "views", path.join( __dirname, "views" ) );
 app.set( "view engine", "ejs" );
+app.use(express.json());
+app.use(express.static(__dirname+'/assets'));
+app.use(express.urlencoded({ extended: false }))
+app.use(cookieSession({
+  username: 'session',
+  loggedin: false,
+  keys: ['key1', 'key2'],
+  // Cookie Options
+  maxAge: 24 * 60 * 60 * 1000 // 24 hours
+}))
 
-app.get('/', (req: Request, res: Response) => {
-  getAllDragons().then((data:Array<IDragons>) => {  
-    res.render( "index", {dragons: data} );
-  });
+app.get("/",(req: Request, res: Response) => {
+  let errMsg = ""
+  res.render('login',{info : errMsg})
+})
+
+app.post('/auth', (req:Request, res:Response) => {
+	let username = req.body.login;
+	let password = req.body.password;
+	if (username && password) {
+		getUsers(username,password).then((data:any)=> {
+      if(data.length > 0) {
+        if(req.session){
+          req.session.username = username;
+          req.session.loggedin = true;
+				  res.redirect('/list');
+        }
+			} else {
+        let errMsg = "Incorrect Username/Password!"
+        res.render('login',{info : errMsg})
+        // res.send('Incorrect Username and/or Password!');
+			}			
+		});
+	} else {
+    let errMsg = "Please enter Username and Password!"
+    res.render('login',{info : errMsg})
+		res.end();
+	}
+});
+
+app.get("/register",(req: Request, res: Response) => {
+  res.render('register')
+})
+
+app.post('/register', (req:Request,res:Response) => {
+  let username = req.body.login;
+	let password = req.body.password;
+  if (username && password) {
+		addUser(username,password).then((data:any)=> {
+			res.redirect('/');		
+		});
+	} else {
+		res.send('Please enter Username and Password!');
+		res.end();
+	}
+});
+
+app.get("/logout",(req: Request, res: Response) => {
+  if(req.session){
+    req.session.username = "";
+    req.session.loggedin = false;
+    res.redirect('/')
+  }
+})
+
+app.get('/list', (req: Request, res: Response) => {
+  if(req.session && req.session.loggedin == true){
+    getAllDragons().then((data:Array<IDragons>) => { 
+      for(let d of data){
+        if(typeof d.objects == "string"){
+          let obj = d.objects.split(",")
+          d.objects = obj;
+        }
+      }
+      // let myProm = []@
+      // for(let d of data){
+      //   d.objects = []
+      //   myProm.push(getDragonsEquipment(d.id))
+      //   // .then(( data2:Array<IObjects>) => {
+      //   //   data[d].objects = data2
+      //   //   console.log(data[0].objects)
+      //   // })
+      // }Promise.all(myProm).then((data2:Array<Array<IObjects>>) => {
+      //   for(let d of data){
+      //     for(let tabObjects of data2){
+      //       for(let object of tabObjects){
+      //         if(d.id == object.dragon_id){
+      //           d.objects.push(object)
+      //         }
+      //       }
+      //     }
+      //   }
+      // })
+      res.render( "list", {dragons: data} );
+    });
+  }else{
+    res.redirect( "/");
+  }
+})
+
+app.get("/detail/:id", (req, res) => {
+  if(req.session && req.session.loggedin == true){
+    getById(req.params.id).then((data:Array<IDragons>) => {  
+      if(typeof data[0].objects == "string"){
+        let test = data[0].objects.split(",")
+        data[0].objects = test;
+      }
+      res.render( "detail", {dragon: data[0]} );
+    });
+  }else{
+    res.redirect( "/");
+  }
+})
+
+app.get('/addDragon', (req,res) => {
+  if(req.session && req.session.loggedin == true){
+    res.render('addDragon')
+  }
+})
+
+app.post('/addDragon', (req,res) => {
+  if(req.session && req.session.loggedin == true){
+    let name = req.body.name
+    addDragon(name).then((data:any) => {
+      res.redirect('/list')
+    })
+  }
 })
 
 app.listen(port, () => {

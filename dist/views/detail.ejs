@@ -1,0 +1,26 @@
+<%- include('header'); -%>
+<%- include('navbar'); -%>
+
+<body>
+    <main>
+        <h2> <%= dragon.name %></small> lvl(<%= dragon.level %>)</small></h2>
+        <ul>
+            <li><%= dragon.attack %></li>
+            <li><%= dragon.defense %></li>
+            <li><%= dragon.slip %></li>
+            <li><%= dragon.objects %></li>
+            <li>
+                <ol>
+                    <% for(var j=0; j <= dragon.objects.length; j++) {%>
+                    <li><%= dragon.objects[j] %></li>
+                    <% } %>
+                </ol>
+            </li>
+            
+        </ul>
+        
+    </main>
+  <%- include('footer'); -%> 
+</body>
+
+</html>
