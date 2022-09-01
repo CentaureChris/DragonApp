@@ -1,14 +1,14 @@
 <%- include('header'); -%>
 <%- include('navbar'); -%>
 
-<body>
+<body id="loginPage">
     <main style="margin:15%">
         <form method="post" action="auth" >
-            <fieldset>
+            <fieldset class="bg-light p-2 text-white bg-opacity-50">
+                <legend class="text-center">Login Form</legend>
                 <% if(info !== ""){ %>
                 <div class="bg-danger p-2 text-white text-center bg-opacity-50 rounded-pill mb-3"><%= info %></div>
                 <% } %> 
-                <legend>Login Form</legend>
                 <div class="mb-3">
                     <label for="disabledTextInput" class="form-label">Login</label>
                     <input type="text" id="login" name="login" class="form-control">

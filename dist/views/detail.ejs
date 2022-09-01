@@ -1,26 +1,53 @@
 <%- include('header'); -%>
 <%- include('navbar'); -%>
 
-<body>
+<body id="detailPage">
     <main>
-        <h2> <%= dragon.name %></small> lvl(<%= dragon.level %>)</small></h2>
-        <ul>
-            <li><%= dragon.attack %></li>
-            <li><%= dragon.defense %></li>
-            <li><%= dragon.slip %></li>
-            <li><%= dragon.objects %></li>
-            <li>
-                <ol>
-                    <% for(var j=0; j <= dragon.objects.length; j++) {%>
-                    <li><%= dragon.objects[j] %></li>
+        <div style="display: flex;justify-content:space-between">
+            <div class="card mt-3" style="width: 50%;">
+            <img src="/images/<%= dragon.avatar %>" class="img-fluid rounded-start" alt="<%= dragon.avatar %>">
+            <div class="card-body">
+            <h5 class="card-title"><%= dragon.name %> <small>lvl(<%= dragon.level %>)</small></h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            </div>
+                <ul class="list-group list-group-flush">
+                <li class="list-group-item">Attack: <%= dragon.attack %></li>
+                <li class="list-group-item">Defense: <%= dragon.defense %></li>
+                <li class="list-group-item">Slip: <%= dragon.slip %></li>
+                <% if(dragon.objects != null){ %> 
+                <li class="list-group-item">Objects: 
+                    <ol class="list-group list-group-flush">
+                        <%for(var j=0; j <= dragon.length; j++) {%>
+                            <li><%= dragon.objects[j] %></li>
+                        <% } %>
+                        <% }else {%>
+                            <li class="list-group-item">Objects: 
+                    <ol class="list-group list-group-flush">
+                        <li class="list-group-item">empty</li>
+                    </ol>
+                </li>
                     <% } %>
                 </ol>
-            </li>
-            
-        </ul>
-        
+                </li> 
+            </ul>
+        </div>
+        <div style="width: 50%;" class="bg-light p-2 bg-opacity-50">
+            <div class="container text-center" >
+                <div class="row row-cols-2">
+            <% for(var i=0; i < objects.length; i++) {%>
+                <div class="col p-3">
+                    <img src="/images/<%= objects[i].image%>" style="width:-webkit-fill-available;" alt="">
+                </div>
+            <% } %>
+                </div>
+            </div>
+          </div>
+        </div>
+        <a href="/fight_selection/<%= dragon.id %>/<%= dragon.rider %>"><button>Go to fight</button></a>
+
     </main>
   <%- include('footer'); -%> 
 </body>
 
 </html>
+

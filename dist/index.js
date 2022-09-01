@@ -6,9 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const path_1 = __importDefault(require("path"));
 const users_1 = require("./model/users");
-// import { Dragon } from "./class/DragonClass"
-const { getAllDragons, getById, addDragon } = require("./model/dragons");
-const { getUsers } = require("./model/users");
+const objects_1 = require("./model/objects");
+const { getAllDragons, getById, addDragon, getOpponents } = require("./model/dragons");
 var cookieSession = require("cookie-session");
 // const dotenv = require('dotenv');
 // dotenv.config();
@@ -34,18 +33,18 @@ app.post('/auth', (req, res) => {
     let username = req.body.login;
     let password = req.body.password;
     if (username && password) {
-        getUsers(username, password).then((data) => {
+        (0, users_1.getUsers)(username, password).then((data) => {
             if (data.length > 0) {
+                let idUser = data[0].id;
                 if (req.session) {
                     req.session.username = username;
                     req.session.loggedin = true;
-                    res.redirect('/list');
+                    res.redirect(`/list/${idUser}`);
                 }
             }
             else {
                 let errMsg = "Incorrect Username/Password!";
                 res.render('login', { info: errMsg });
-                // res.send('Incorrect Username and/or Password!');
             }
         });
     }
@@ -78,9 +77,10 @@ app.get("/logout", (req, res) => {
         res.redirect('/');
     }
 });
-app.get('/list', (req, res) => {
-    if (req.session && req.session.loggedin == true) {
-        getAllDragons().then((data) => {
+app.get('/list/:id', (req, res) => {
+    if (req.session && req.session.loggedin == true && req.session !== null && req.session !== undefined) {
+        let idUser = req.params.id;
+        getAllDragons(idUser).then((data) => {
             for (let d of data) {
                 if (typeof d.objects == "string") {
                     let obj = d.objects.split(",");
@@ -106,7 +106,7 @@ app.get('/list', (req, res) => {
             //     }
             //   }
             // })
-            res.render("list", { dragons: data });
+            res.render("list", { dragons: data, idUser: idUser, user: req.session.username });
         });
     }
     else {
@@ -117,26 +117,46 @@ app.get("/detail/:id", (req, res) => {
     if (req.session && req.session.loggedin == true) {
         getById(req.params.id).then((data) => {
             if (typeof data[0].objects == "string") {
-                let test = data[0].objects.split(",");
-                data[0].objects = test;
+                let obj = data[0].objects.split(",");
+                data[0].objects = obj;
             }
-            res.render("detail", { dragon: data[0] });
+            (0, objects_1.getAllObjects)().then((data2) => {
+                res.render("detail", { dragon: data[0], objects: data2 });
+            });
         });
     }
     else {
         res.redirect("/");
     }
 });
-app.get('/addDragon', (req, res) => {
+app.get('/addDragon/:id', (req, res) => {
     if (req.session && req.session.loggedin == true) {
         res.render('addDragon');
     }
 });
-app.post('/addDragon', (req, res) => {
+app.post('/addDragon/:id', (req, res) => {
     if (req.session && req.session.loggedin == true) {
         let name = req.body.name;
-        addDragon(name).then((data) => {
-            res.redirect('/list');
+        addDragon(name, req.params.id).then((data) => {
+            res.redirect(`/list/${req.params.id}`);
+        });
+    }
+});
+app.get('/fight_selection/:id/:rider', (req, res) => {
+    if (req.session && req.session.loggedin == true) {
+        getById(req.params.id).then((data) => {
+            if (typeof data[0].objects == "string") {
+                let obj = data[0].objects.split(",");
+                data[0].objects = obj;
+            }
+            getOpponents(req.params.rider).then((data2) => {
+                if (typeof data2[0].objects == "string") {
+                    let obj = data2[0].objects.split(",");
+                    data2[0].objects = obj;
+                }
+                console.log(data2);
+                res.render('fightSelection', { dragon: data[0], opponnents: data2 });
+            });
         });
     }
 });

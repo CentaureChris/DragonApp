@@ -1,6 +1,30 @@
+body{
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+#loginPage{
+  background-image: url("/images/dance-of-dragons.jpeg");
+}
+
+#listPage{
+  background-image: url("/images/dragonwall.jpeg");
+
+}
+
+#detailPage{
+  background-image: url("/images/dragonwall3.jpg");
+}
+
+#fightPage{
+  background-image: url("/images/dragonwall2.png");
+}
+
 main {
  min-height: calc(100vh - 50px);
  padding: 2%;
+
 }
 
 footer {

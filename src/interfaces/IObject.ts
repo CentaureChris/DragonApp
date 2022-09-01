@@ -6,4 +6,5 @@ export interface IObjects {
     defense: number;
     slip: number;
     dragon_id:number;
+    image:string;
 }

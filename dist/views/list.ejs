@@ -1,49 +1,44 @@
 <%- include('header'); -%>
 <%- include('navbar'); -%>
-
-<body>
+<h1 class="text-white">DragonRider:<%= user %></h1>
+<body id="listPage">
   <main>
+    <div class="button-29" style="min-width: fit-content;">
+      <a href="/addDragon/<%= idUser %>" class="disabled_aColor" style="color: white;"><i class="fa-solid fa-plus fa-10x"></i></a>
+    </div>
     <% for(var i=0; i < dragons.length; i++) {%>
-      <div class="card mb-3" style="max-width: 540px;" >
+
+      <div class="card mt-3" style="width: 600px;">
         <a href="/detail/<%= dragons[i].id %>" class="disabled_aColor">
-        <div class="row g-0">
-            <div class="col-md-4">
-              <!-- <img src="..." class="img-fluid rounded-start" alt="..."> -->
-            </div>
-            <div class="col-md-8">
-              <div class="card-body">
-                <h5 class="card-title">Dragon: <%= dragons[i].name %> <small>lvl(<%= dragons[i].level %>)</small></h5>
-                <ul>
-                  <li>Attack: <%= dragons[i].attack %></li>
-                  <li>Defense: <%= dragons[i].defense %></li>
-                  <li>Slip: <%= dragons[i].slip %></li>
-                  <% if(dragons[i].objects != null){ %> 
-                  <li>Objects: 
-                    <ol>
-                      <%for(var j=0; j <= dragons.length; j++) {%>
-                        <li><%= dragons[i].objects[j] %></li>
-                      <% }}else {%>
-                        <li>Objects: 
-                          <ol>
-                            <li>empty</li>
-                          </ol>
-                        </li>
-                      <% } %>
-                    </ol>
-                  </li> 
-                </ul>
-                </div>
-            </div>
-          </div>
-        </a>  
+        <img src="/images/<%= dragons[i].avatar %>" class="img-fluid rounded-start" alt="<%= dragons[i].avatar %>">
+        <div class="card-body">
+          <h5 class="card-title"><%= dragons[i].name %> <small>lvl(<%= dragons[i].level %>)</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Attack: <%= dragons[i].attack %></li>
+          <li class="list-group-item">Defense: <%= dragons[i].defense %></li>
+          <li class="list-group-item">Slip: <%= dragons[i].slip %></li>
+          <% if(dragons[i].objects != null){ %> 
+          <li class="list-group-item">Objects: 
+            <ol class="list-group list-group-flush">
+              <%for(var j=0; j <= dragons.length; j++) {%>
+                <li><%= dragons[i].objects[j] %></li>
+              <% } %>
+            <% }else {%>
+                <li class="list-group-item">Objects: 
+                  <ol class="list-group list-group-flush">
+                    <li class="list-group-item">empty</li>
+                  </ol>
+                </li>
+              <% } %>
+            </ol>
+          </li> 
+        </ul>
+      </a>
       </div>
     <% } %>
-    <div class="button-29" style="min-width: fit-content;">
-      <a href="/addDragon" class="disabled_aColor" style="color: white;"><i class="fa-solid fa-plus fa-10x"></i></a>
-    </div>
     </main>
   <%- include('footer'); -%>
 </body>
-
-
 </html>
