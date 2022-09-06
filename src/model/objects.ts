@@ -14,3 +14,12 @@ export function getAllObjects() {
         })
     })
 }
+
+export function getObjectById(id:number|string){
+    return new Promise((result,rej) => {
+        conn.query(`SELECT * FROM object WHERE object.id = ${id}`,(err: any, res: any) => {
+            if (err) rej(err)
+            else result(res)
+        })
+    })
+}

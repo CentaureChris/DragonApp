@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllObjects = void 0;
+exports.getObjectById = exports.getAllObjects = void 0;
 const mysql = require("mysql2");
 let conn = mysql.createConnection({
     host: "localhost",
@@ -19,3 +19,14 @@ function getAllObjects() {
     });
 }
 exports.getAllObjects = getAllObjects;
+function getObjectById(id) {
+    return new Promise((result, rej) => {
+        conn.query(`SELECT * FROM object WHERE object.id = ${id}`, (err, res) => {
+            if (err)
+                rej(err);
+            else
+                result(res);
+        });
+    });
+}
+exports.getObjectById = getObjectById;

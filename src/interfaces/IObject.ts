@@ -5,6 +5,6 @@ export interface IObjects {
     attack: number;
     defense: number;
     slip: number;
-    dragon_id:number;
+    // dragon_id:number|undefined;
     image:string;
 }

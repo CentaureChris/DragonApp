@@ -21,9 +21,9 @@
           <li class="list-group-item">Slip: <%= dragons[i].slip %></li>
           <% if(dragons[i].objects != null){ %> 
           <li class="list-group-item">Objects: 
-            <ol class="list-group list-group-flush">
-              <%for(var j=0; j <= dragons.length; j++) {%>
-                <li><%= dragons[i].objects[j] %></li>
+            <ol class="list-group list-group-flush" style="display: flex;flex-direction: inherit;justify-content: space-between;">
+              <%for(var j=0; j < dragons[i].objects.length ; j++) {%>
+                <li><img src="/images/<%= dragons[i].objects[j].image %>" alt="" style="width:5rem"></li>
               <% } %>
             <% }else {%>
                 <li class="list-group-item">Objects: 
