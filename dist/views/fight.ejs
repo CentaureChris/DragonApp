@@ -1,0 +1,70 @@
+<%- include('header'); -%>
+<%- include('navbar'); -%>
+
+<body id="fightPage">
+    <main style="display:flex;justify-content:space-around">
+    <div style="height: 100px;width:35%;">
+        <div class="card mt-3">
+            <img src="/images/<%= dragon.avatar %>" class="img-fluid rounded-start" alt="<%= dragon.avatar %>">
+            <div class="card-body">
+            <h5 class="card-title"><%= dragon.name %> <small>lvl(<%= dragon.level %>)</small></h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            </div>
+                <ul class="list-group list-group-flush">
+                <li class="list-group-item">Attack: <%= dragon.attack %></li>
+                <li class="list-group-item">Defense: <%= dragon.defense %></li>
+                <li class="list-group-item">Slip: <%= dragon.slip %></li>
+                <% if(dragon.objects != null){ %> 
+                <li class="list-group-item">Objects: 
+                    <ol class="list-group list-group-flush">
+                        <%for(var j=0; j <= dragon.length; j++) {%>
+                            <li><%= dragon.objects[j] %></li>
+                        <% } %>
+                        <% }else {%>
+                            <li class="list-group-item">Objects: 
+                    <ol class="list-group list-group-flush">
+                        <li class="list-group-item">empty</li>
+                    </ol>
+                </li>
+                    <% } %>
+                </ol>
+                </li> 
+            </ul>
+        </div>
+    </div>
+    <div style="height: 100px;width:30%;">
+        <img src="/images/vs.png" alt="" srcset="" style="width:-webkit-fill-available;">
+    </div>
+    <div style="height: 100px;width:35%;">
+        <div class="card mt-3">
+            <img src="/images/<%= opponent.avatar %>" class="img-fluid rounded-start" alt="<%= opponent.avatar %>">
+            <div class="card-body">
+            <h5 class="card-title"><%= opponent.name %> <small>lvl(<%= opponent.level %>)</small></h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            </div>
+                <ul class="list-group list-group-flush">
+                <li class="list-group-item">Attack: <%= opponent.attack %></li>
+                <li class="list-group-item">Defense: <%= opponent.defense %></li>
+                <li class="list-group-item">Slip: <%= opponent.slip %></li>
+                <% if(opponent.objects != null){ %> 
+                <li class="list-group-item">Objects: 
+                    <ol class="list-group list-group-flush">
+                        <%for(var j=0; j <= opponent.length; j++) {%>
+                            <li><%= opponent.objects[j] %></li>
+                        <% } %>
+                        <% }else {%>
+                            <li class="list-group-item">Objects: 
+                    <ol class="list-group list-group-flush">
+                        <li class="list-group-item">empty</li>
+                    </ol>
+                </li>
+                    <% } %>
+                </ol>
+                </li> 
+            </ul>
+        </div>
+    </div>
+    </div>
+</main>
+
+</body>

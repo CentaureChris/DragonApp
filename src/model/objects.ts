@@ -23,3 +23,12 @@ export function getObjectById(id:number|string){
         })
     })
 }
+
+export function boostDragonsStats(id:number,a:number,d:number,s:number){
+    return new Promise((result,rej) => {
+        conn.query(`UPDATE dragon set attack = ${a},defense = ${d}, slip = ${s} WHERE id = ${id}`,(err: any, res: any) => {
+            if (err) rej(err)
+            else result(res)
+        })
+    })
+}

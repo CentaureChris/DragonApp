@@ -11,25 +11,10 @@
             <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
             </div>
                 <ul class="list-group list-group-flush">
-                <li class="list-group-item">Attack: <%= dragon.attack %></li>
-                <li class="list-group-item">Defense: <%= dragon.defense %></li>
-                <li class="list-group-item">Slip: <%= dragon.slip %></li>
-                <% if(dragon.objects != null){ %> 
-                <li class="list-group-item">Objects: 
-                    <ol class="list-group list-group-flush">
-                        <%for(var j=0; j <= dragon.length; j++) {%>
-                            <li><%= dragon.objects[j] %></li>
-                        <% } %>
-                        <% }else {%>
-                            <li class="list-group-item">Objects: 
-                    <ol class="list-group list-group-flush">
-                        <li class="list-group-item">empty</li>
-                    </ol>
-                </li>
-                    <% } %>
-                </ol>
-                </li> 
-            </ul>
+                  <li class="list-group-item">Attack: <%= dragon.attack %></li>
+                  <li class="list-group-item">Defense: <%= dragon.defense %></li>
+                  <li class="list-group-item">Slip: <%= dragon.slip %></li>
+                </ul>
         </div>
     </div>
     <div style="height: 100px;width:30%;">
@@ -39,7 +24,7 @@
         <% for(var i=0; i < opponnents.length; i++) {%>
 
             <div class="card mt-3" style="width: 600px;">
-              <a href="/detail/<%= opponnents[i].id %>" class="disabled_aColor">
+              <a href="/fight/<%= dragon.id %>/<%= opponnents[i].id %>" class="disabled_aColor">
               <img src="/images/<%= opponnents[i].avatar %>" class="img-fluid rounded-start" alt="<%= opponnents[i].avatar %>">
               <div class="card-body">
                 <h5 class="card-title"><%= opponnents[i].name %> <small>lvl(<%= opponnents[i].level %>)</h5>
@@ -49,21 +34,6 @@
                 <li class="list-group-item">Attack: <%= opponnents[i].attack %></li>
                 <li class="list-group-item">Defense: <%= opponnents[i].defense %></li>
                 <li class="list-group-item">Slip: <%= opponnents[i].slip %></li>
-                <% if(opponnents[i].objects != null){ %> 
-                <li class="list-group-item">Objects: 
-                  <ol class="list-group list-group-flush">
-                    <%for(var j=0; j <= opponnents.length; j++) {%>
-                      <li><%= opponnents[i].objects[j] %></li>
-                    <% } %>
-                  <% }else {%>
-                      <li class="list-group-item">Objects: 
-                        <ol class="list-group list-group-flush">
-                          <li class="list-group-item">empty</li>
-                        </ol>
-                      </li>
-                    <% } %>
-                  </ol>
-                </li> 
               </ul>
             </a>
             </div>

@@ -88,22 +88,6 @@ app.get("/logout", (req, res) => {
         res.redirect('/');
     }
 });
-// app.get('/list/:id', (req: Request, res: Response) => {
-//   if(req.session && req.session.loggedin == true && req.session !== null && req.session !== undefined){
-//     let idUser = req.params.id
-//     getAllDragons(idUser).then((data:Array<IDragons>) => { 
-//       for(let d of data){
-//         if(typeof d.objects == "string"){
-//           let obj = d.objects.split(",")
-//           d.objects = obj;
-//         }
-//       }
-//       res.render( "list", {dragons: data,idUser: idUser, user:req.session.username} );
-//     });
-//   }else{
-//     res.redirect( "/");
-//   }
-// })
 app.get('/list/:id', (req, res) => {
     if (req.session && req.session.loggedin == true && req.session !== null && req.session !== undefined) {
         let idUser = req.params.id;
@@ -113,9 +97,16 @@ app.get('/list/:id', (req, res) => {
                 if (typeof d.objects === 'string') {
                     d.objects = d.objects.split(',');
                 }
-                let dragon = new DragonClass_1.Dragon(d.name, d.level, d.attack, d.defense, d.slip, d.objects, d.id);
+                let dragon = new DragonClass_1.Dragon(d.name);
+                dragon.setId(d.id);
+                dragon.addObject(d.objects);
+                dragon.setAttack(d.attack);
+                dragon.setDefense(d.defense);
+                dragon.setSlip(d.slip);
+                dragon.setLevel(d.level);
                 dragon.setAvatar(d.avatar);
                 dragon.setRider(d.rider);
+                console.log(dragon);
                 if (d.objects !== null) {
                     dragon.objects = [];
                     for (let obj of d.objects) {
@@ -136,43 +127,42 @@ app.get('/list/:id', (req, res) => {
 });
 app.get("/detail/:id", (req, res) => {
     if (req.session && req.session.loggedin == true) {
-        getById(req.params.id).then((data) => {
+        getById(req.params.id).then((data) => __awaiter(void 0, void 0, void 0, function* () {
             if (typeof data[0].objects == "string") {
-                let obj = data[0].objects.split(",");
-                data[0].objects = obj;
+                data[0].objects = data[0].objects.split(',');
             }
+            let dragon = new DragonClass_1.Dragon(data[0].name);
+            dragon.setId(data[0].id);
+            dragon.setAttack(data[0].attack);
+            dragon.setDefense(data[0].defense);
+            dragon.setSlip(data[0].slip);
+            dragon.setLevel(data[0].level);
+            dragon.setAvatar(data[0].avatar);
+            if (data[0].rider)
+                dragon.setRider(data[0].rider);
+            dragon.objects = [];
+            if (data[0].objects)
+                for (let obj of data[0].objects) {
+                    yield (0, objects_1.getObjectById)(obj).then((data2) => {
+                        let Obj = new ObjectsClass_1.Objects(data2[0].name, data2[0].type, data2[0].attack, data2[0].defense, data2[0].slip, data2[0].image);
+                        dragon.addObject(Obj);
+                        if (dragon.id) {
+                            Obj.setDragonid(dragon.id);
+                        }
+                    });
+                }
+            console.log(dragon);
+            let allObjects;
             (0, objects_1.getAllObjects)().then((data2) => {
-                res.render("detail", { dragon: data[0], objects: data2 });
+                allObjects = data2;
+                res.render("detail", { dragon: dragon, objects: allObjects });
             });
-        });
+        }));
     }
     else {
         res.redirect("/");
     }
 });
-// app.get ('/detail/:id', (req, res) => {
-//   if(req.session && req.session.loggedin == true){
-//     getById(req.params.id).then(async (data:Array<IDragons>) => {
-//       if(typeof data[0].objects == "string"){
-//         let obj = data[0].objects.split(",")
-//         data[0].objects = obj;
-//       }
-//       let dragon = new Dragon(data[0].name,data[0].level,data[0].attack,data[0].defense,data[0].slip,data[0].objects,data[0].id)
-//       dragon.setAvatar(data[0].avatar)
-//       // dragon.setRider(data[0].rider)
-//       if (data[0].objects !== null){
-//         dragon.objects = []
-//         if(data[0].objects)
-//         for(let obj of data[0].objects){
-//           await getObjectById(obj).then((data2:any) => {
-//             let Obj = new Objects(data2[0].name,data2[0].type,data2[0].attack,data2[0].defense,data2[0].slip,data2[0].image)
-//             dragon.addObject(Obj)
-//           })
-//         }
-//       }
-//     })
-//   }
-// })
 app.get('/addDragon/:id', (req, res) => {
     if (req.session && req.session.loggedin == true) {
         res.render('addDragon');
@@ -203,6 +193,27 @@ app.get('/fight_selection/:id/:rider', (req, res) => {
             });
         });
     }
+});
+app.get('/fight/:id/:opponnent', (req, res) => {
+    getById(req.params.id).then((data) => {
+        let dragon = new DragonClass_1.Dragon(data[0].name);
+        dragon.setId(data[0].id);
+        dragon.setAttack(data[0].attack);
+        dragon.setDefense(data[0].defense);
+        dragon.setSlip(data[0].slip);
+        dragon.setLevel(data[0].level);
+        dragon.setAvatar(data[0].avatar);
+        getById(req.params.opponnent).then((data) => {
+            let opponent = new DragonClass_1.Dragon(data[0].name);
+            opponent.setId(data[0].id);
+            opponent.setAttack(data[0].attack);
+            opponent.setDefense(data[0].defense);
+            opponent.setSlip(data[0].slip);
+            opponent.setLevel(data[0].level);
+            opponent.setAvatar(data[0].avatar);
+            res.render('fight', { dragon: dragon, opponent: opponent });
+        });
+    });
 });
 app.listen(port, () => {
     console.log(`⚡️[server]: Server is running at https://localhost:${port}`);

@@ -3,14 +3,29 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Dragon = void 0;
 const { getAllDragons, getById, addDragon, getOpponents } = require("../model/dragons");
 class Dragon {
-    constructor(n, l, at, d, s, o, id) {
+    constructor(n) {
         this.name = n;
-        this.level = l;
-        this.attack = at;
-        this.defense = d;
-        this.slip = s;
-        this.objects = o;
+        this.level = 1;
+        this.attack = 3;
+        this.defense = 3;
+        this.slip = 1;
+        this.objects = undefined;
+        // this.id = 
+    }
+    setId(id) {
         this.id = id;
+    }
+    setLevel(level) {
+        this.level = level;
+    }
+    setAttack(attack) {
+        this.attack = attack;
+    }
+    setDefense(defense) {
+        this.defense = defense;
+    }
+    setSlip(slip) {
+        this.slip = slip;
     }
     setRider(rider) {
         this.rider = rider;

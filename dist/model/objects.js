@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getObjectById = exports.getAllObjects = void 0;
+exports.boostDragonsStats = exports.getObjectById = exports.getAllObjects = void 0;
 const mysql = require("mysql2");
 let conn = mysql.createConnection({
     host: "localhost",
@@ -30,3 +30,14 @@ function getObjectById(id) {
     });
 }
 exports.getObjectById = getObjectById;
+function boostDragonsStats(id, a, d, s) {
+    return new Promise((result, rej) => {
+        conn.query(`UPDATE dragon set attack = ${a},defense = ${d}, slip = ${s} WHERE id = ${id}`, (err, res) => {
+            if (err)
+                rej(err);
+            else
+                result(res);
+        });
+    });
+}
+exports.boostDragonsStats = boostDragonsStats;

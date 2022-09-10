@@ -32,7 +32,7 @@ function getAllDragons(idUser) {
 exports.getAllDragons = getAllDragons;
 function getById(id) {
     return new Promise((result, rej) => {
-        conn.query(`SELECT d.id,d.name,d.level,d.attack,d.defense,d.slip,d.rider,a.image as avatar, GROUP_CONCAT(obj.name) AS objects FROM dragon AS d LEFT JOIN equipment as eq ON d.id = eq.dragon_id LEFT JOIN object as obj ON eq.object_id = obj.id LEFT JOIN avatar as a ON a.id = d.avatar WHERE d.id = ${id} GROUP BY d.id `, (err, res) => {
+        conn.query(`SELECT d.id,d.name,d.level,d.attack,d.defense,d.slip,d.rider,a.image as avatar, GROUP_CONCAT(obj.id) AS objects FROM dragon AS d LEFT JOIN equipment as eq ON d.id = eq.dragon_id LEFT JOIN object as obj ON eq.object_id = obj.id LEFT JOIN avatar as a ON a.id = d.avatar WHERE d.id = ${id} GROUP BY d.id `, (err, res) => {
             if (err)
                 rej(err);
             else
