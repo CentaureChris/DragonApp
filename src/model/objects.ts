@@ -1,34 +1,70 @@
-const mysql = require("mysql2")
-let conn = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "root",
-    database: "dragoncombat"
-})
+import { SingleDb } from '../class/SingleDb'
+let db = SingleDb.getInstance()
 
 export function getAllObjects() {
     return new Promise((result, rej) => {
-        conn.query(`SELECT * FROM object `, (err: any, res: any) => {
-            if (err) rej(err)
-            else result(res)
+        db.query(`SELECT * FROM object `,[]).then((data:any) => {
+            const retObj = data
+            result(retObj)
+        }).catch((err:Error) => {
+            rej(err)
         })
     })
 }
 
 export function getObjectById(id:number|string){
     return new Promise((result,rej) => {
-        conn.query(`SELECT * FROM object WHERE object.id = ${id}`,(err: any, res: any) => {
-            if (err) rej(err)
-            else result(res)
+        db.query(`SELECT * FROM object WHERE object.id = ?`,[id]).then((data:any) => {
+            const retObj = data
+            result(retObj)
+        }).catch((err:Error) => {
+            rej(err)
         })
     })
 }
 
 export function boostDragonsStats(id:number,a:number,d:number,s:number){
     return new Promise((result,rej) => {
-        conn.query(`UPDATE dragon set attack = ${a},defense = ${d}, slip = ${s} WHERE id = ${id}`,(err: any, res: any) => {
-            if (err) rej(err)
-            else result(res)
+        db.query(`UPDATE dragon set attack = ${a},defense = ${d}, slip = ${s} WHERE id = ?`,[id]).then((data:any) => {
+            const retObj = data
+            result(retObj)
+        }).catch((err:Error) => {
+            rej(err)
+        })
+    })
+}
+
+export function addEquipment(dragon:number,object:number){
+    return new Promise((result,rej) => {
+        db.query(`INSERT INTO equipment (dragon_id, object_id)
+            VALUES (?,?)`,[dragon,object]).then((data:any) => {
+            const retObj = data
+            result(retObj)
+        }).catch((err:Error) => {
+            rej(err)
+        })
+    })
+}
+
+export function clearEquipment(dragon:number){
+    return new Promise((result,rej) => {
+        db.query(`DELETE FROM equipment
+        WHERE dragon_id = ?`,[dragon]).then((data:any) => {
+            const retObj = data
+            result(retObj)
+        }).catch((err:Error) => {
+            rej(err)
+        })
+    })
+}
+
+export function bagCount(id:number){
+    return new Promise((result,rej) => {
+        db.query(`SELECT COUNT(object_id) as count FROM equipment WHERE dragon_id = ?`,[id]).then((data:any) => {
+            const retObj = data
+            result(retObj)
+        }).catch((err:Error) => {
+            rej(err)
         })
     })
 }

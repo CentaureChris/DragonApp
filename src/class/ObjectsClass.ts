@@ -1,6 +1,6 @@
 import { IObjects } from "../interfaces/IObject";
 import { Dragon } from "../class/DragonClass";
-import { boostDragonsStats, Model } from "../model/objects"
+import { threadId } from "worker_threads";
 
 export class Objects implements IObjects {
 
@@ -26,10 +26,7 @@ export class Objects implements IObjects {
         this.dragon_id = id
     }
 
-    public boost(a:number,d:number,s:number){
-        boostDragonsStats(this.dragon_id,a,d,s).then((data:any) => {
-            console.log(data);
-        })
+    public getAttack(){
+        return this.attack
     }
-
 }

@@ -6,7 +6,7 @@
     <div style="display:flex;justify-content: space-around;">
     <section style="width: 50%;" class="p-2">
       <div class="card mt-3" style="width: 100%;">
-        <a href="/detail/<%= dragon.id %>" class="disabled_aColor">
+        <!-- <a href="/detail/<%= dragon.id %>" class="disabled_aColor"> -->
         <img src="/images/<%= dragon.avatar %>" class="img-fluid rounded-start" alt="<%= dragon.avatar %>">
         <div class="card-body">
           <h5 class="card-title"><%= dragon.name %> <small>lvl(<%= dragon.level %>)</small></h5>
@@ -30,15 +30,18 @@
                 </li>
               <% } %>
             </ol>
-          </li> 
+            <a href="/clearbag/<%= dragon.id %>"><button width="30px">clear</button></a> 
+          </li>
         </ul>
-      </a>
+      <!-- </a> -->
       </div>
     </section>
     <section style="width: 50%;" class="row row-cols-1 row-cols-md-2 g-4 p-2">
       <% for(var j=0; j < objects.length ; j++) { %>
         <div class="col">
-          <img src="/images/<%= objects[j].image %>" alt="" style="width: 100%;border-radius: 10%;">
+          <a href="/detail/<%= dragon.id %>/<%= objects[j].id %>/">
+            <img src="/images/<%= objects[j].image %>" alt="" style="width: 100%;border-radius: 10%;">
+          </a>
         </div>
       <% } %> 
     </section>

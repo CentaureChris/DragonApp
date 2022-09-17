@@ -17,7 +17,7 @@
                 <% if(dragon.objects != null){ %> 
                 <li class="list-group-item">Objects: 
                     <ol class="list-group list-group-flush">
-                        <%for(var j=0; j <= dragon.length; j++) {%>
+                        <%for(var j=0; j <= dragon.objects.length; j++) {%>
                             <li><%= dragon.objects[j] %></li>
                         <% } %>
                         <% }else {%>
@@ -64,7 +64,9 @@
             </ul>
         </div>
     </div>
-    </div>
 </main>
+<div style="height:fit-content;background-color: rgba(0, 0, 0, 0.683);color: whitesmoke;text-align: center;">
+    <p><%= fight %></p>
+</div>
 
 </body>
