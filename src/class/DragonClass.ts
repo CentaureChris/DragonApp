@@ -88,17 +88,19 @@ export class Dragon implements IDragons{
             this.level = data[0].level
             this.rider = data[0].rider
             this.avatar = data[0].avatar
-            let dataObj = data[0].objects.split(',')
-
-            for (let obj of dataObj){
-                if(typeof obj == 'number'){
-                    await getObjectById(obj).then((data2:any) => {
-                        let object =  new Objects(data2[0].name,data2[0].type,data2[0].attack,data2[0].defense,data2[0].slip,data2[0].image)
-                        console.log(object)
-                    })
+            if(data[0].objects != null){
+                let dataObj = data[0].objects.split(',')
+                for (let obj of dataObj){
+                    if(typeof obj == 'number'){
+                        await getObjectById(obj).then((data2:any) => {
+                            let object =  new Objects(data2[0].name,data2[0].type,data2[0].attack,data2[0].defense,data2[0].slip,data2[0].image)
+                            console.log(object)
+                        })
+                    }
                 }
+            }else{
+                let dataObj = data[0].objects
             }
-            let cumAtk:number = 0
             // for(let obj of data[0].objects){
             //     await getObjectById(obj).then((data2:any) => {
             //         let Obj = new Objects(data2[0].name,data2[0].type,data2[0].attack,data2[0].defense,data2[0].slip,data2[0].image)

@@ -41,7 +41,7 @@ router.route("/auth")
             }
             else {
                 let errMsg = "Incorrect Username/Password!";
-                res.render('login', { info: errMsg });
+                res.render('login', { info: errMsg, session: req.session });
             }
         });
     }
@@ -141,22 +141,22 @@ router.route("/detail/:id")
             if (typeof data[0].objects == "string") {
                 data[0].objects = data[0].objects.split(',');
             }
-            let dragon = new DragonClass_1.Dragon(data[0].name);
-            dragon.id = data[0].id;
-            dragon.attack = data[0].attack;
-            dragon.defense = data[0].defense;
-            dragon.slip = data[0].slip;
-            dragon.level = data[0].level;
-            dragon.avatar = data[0].avatar;
+            let dragon = new DragonClass_1.Dragon(data[0].id);
+            dragon.fetch();
+            console.log(dragon);
             if (data[0].rider)
                 dragon.rider = data[0].rider;
             dragon.objects = [];
             let cumAtk = 0;
+            let cumDef = 0;
+            let cumSlip = 0;
             if (data[0].objects)
                 for (let obj of data[0].objects) {
                     yield (0, objects_1.getObjectById)(obj).then((data2) => {
                         let Obj = new ObjectsClass_1.Objects(data2[0].name, data2[0].type, data2[0].attack, data2[0].defense, data2[0].slip, data2[0].image);
                         cumAtk += Obj.attack;
+                        cumDef += Obj.defense;
+                        cumSlip += Obj.slip;
                         dragon.addObject(Obj);
                         if (dragon.id) {
                             Obj.setDragonid(dragon.id);
@@ -164,6 +164,8 @@ router.route("/detail/:id")
                     });
                 }
             dragon.attack = dragon.attack + cumAtk;
+            dragon.defense += cumAtk;
+            dragon.slip += cumSlip;
             let allObjects;
             (0, objects_1.getAllObjects)().then((data2) => {
                 allObjects = data2;
@@ -175,36 +177,51 @@ router.route("/detail/:id")
         res.redirect("/");
     }
 });
-router.route('/addDragon/:id')
-    .get((req, res) => {
-    if (req.session && req.session.loggedin == true) {
-        res.render('addDragon');
-    }
-})
-    .post((req, res) => {
-    if (req.session && req.session.loggedin == true) {
-        let name = req.body.name;
-        (0, dragons_1.addDragon)(name, parseInt(req.params.id)).then((data) => {
-            res.redirect(`/list/${req.params.id}`);
-        });
-    }
-});
 router.route('/fight_selection/:id/:rider')
     .get((req, res) => {
     if (req.session && req.session.loggedin == true) {
-        (0, dragons_1.getById)(parseInt(req.params.id)).then((data) => {
+        (0, dragons_1.getById)(parseInt(req.params.id)).then((data) => __awaiter(void 0, void 0, void 0, function* () {
             if (typeof data[0].objects == "string") {
-                let obj = data[0].objects.split(",");
-                data[0].objects = obj;
+                data[0].objects = data[0].objects.split(",");
             }
+            let dragon = new DragonClass_1.Dragon(data[0].name);
+            dragon.id = data[0].id;
+            dragon.attack = data[0].attack;
+            dragon.defense = data[0].defense;
+            dragon.slip = data[0].slip;
+            dragon.level = data[0].level;
+            dragon.avatar = data[0].avatar;
+            if (data[0].rider)
+                dragon.rider = data[0].rider;
+            dragon.objects = [];
+            let cumAtk = 0;
+            let cumDef = 0;
+            let cumSlip = 0;
+            if (data[0].objects)
+                for (let obj of data[0].objects) {
+                    yield (0, objects_1.getObjectById)(obj).then((data2) => {
+                        let Obj = new ObjectsClass_1.Objects(data2[0].name, data2[0].type, data2[0].attack, data2[0].defense, data2[0].slip, data2[0].image);
+                        cumAtk += Obj.attack;
+                        cumDef += Obj.defense;
+                        cumSlip += Obj.slip;
+                        dragon.addObject(Obj);
+                        if (dragon.id) {
+                            Obj.setDragonid(dragon.id);
+                        }
+                    });
+                }
+            dragon.attack += cumAtk;
+            dragon.defense += cumAtk;
+            dragon.slip += cumSlip;
             (0, dragons_1.getOpponents)(parseInt(req.params.rider)).then((data2) => {
                 if (typeof data2[0].objects == "string") {
                     let obj = data2[0].objects.split(",");
                     data2[0].objects = obj;
                 }
-                res.render('fightSelection', { dragon: data[0], opponnents: data2 });
+                res.render('fightSelection', { dragon: dragon, opponnents: data2 });
+                console.log(dragon);
             });
-        });
+        }));
     }
 });
 router.route('/fight/:id/:opponent')
@@ -225,5 +242,19 @@ router.route('/fight/:id/:opponent')
         res.render('fight', { dragon: dragon, opponent: opponent, fight: fight });
     }));
     // })  
+});
+router.route('/addDragon/:id')
+    .get((req, res) => {
+    if (req.session && req.session.loggedin == true) {
+        res.render('addDragon');
+    }
+})
+    .post((req, res) => {
+    if (req.session && req.session.loggedin == true) {
+        let name = req.body.name;
+        (0, dragons_1.addDragon)(name, parseInt(req.params.id)).then((data) => {
+            res.redirect(`/list/${req.params.id}`);
+        });
+    }
 });
 module.exports = router;
