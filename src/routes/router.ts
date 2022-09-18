@@ -3,7 +3,7 @@ import { Dragon } from "../class/DragonClass"
 import { Objects } from "../class/ObjectsClass"
 import { addUser,getUsers } from '../model/users';
 import { getAllObjects, getObjectById,addEquipment, bagCount, clearEquipment } from '../model/objects';
-import { getAllDragons,getById,addDragon,getOpponents } from '../model/dragons';
+import { getAllDragons,getById,addDragon,getOpponents, getAvatar } from '../model/dragons';
 
 const app: Express = express();
 let router = express.Router();
@@ -242,13 +242,20 @@ router.route('/fight/:id/:opponent')
 router.route('/addDragon/:id')
 .get((req,res) => {
   if(req.session && req.session.loggedin == true){
-    res.render('addDragon')
+    let avatarTable:Array<string> = []
+    getAvatar().then((data:any) => {
+      for(let d of data){
+        avatarTable.push(d)
+      }
+      res.render('addDragon',{avatars:avatarTable})
+    })
   }
 })
 .post((req,res) => {
   if(req.session && req.session.loggedin == true){
     let name = req.body.name
-    addDragon(name,parseInt(req.params.id)).then((data:any) => {
+    let avatar = req.body.selectAvatar
+    addDragon(name,parseInt(req.params.id),avatar).then((data:any) => {
       res.redirect(`/list/${req.params.id}`)
     })
   }

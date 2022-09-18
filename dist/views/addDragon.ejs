@@ -10,6 +10,14 @@
                     <label for="disabledTextInput" class="form-label">Name</label>
                     <input type="text" id="name" name="name" class="form-control">
                 </div>
+                <div class="mb-3">
+                    <label for="selectAvatar" class="form-label">Avatar</label>
+                    <select type="text" id="selectAvatar" name="selectAvatar" class="form-control">
+                        <% for(var i=0; i < avatars.length ; i++) {%>
+                        <option value="<%= avatars[i].id %>"><%= avatars[i].image %></option>
+                        <% } %>
+                    </select>
+                </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </fieldset>
         </form>

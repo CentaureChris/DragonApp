@@ -246,13 +246,20 @@ router.route('/fight/:id/:opponent')
 router.route('/addDragon/:id')
     .get((req, res) => {
     if (req.session && req.session.loggedin == true) {
-        res.render('addDragon');
+        let avatarTable = [];
+        (0, dragons_1.getAvatar)().then((data) => {
+            for (let d of data) {
+                avatarTable.push(d);
+            }
+            res.render('addDragon', { avatars: avatarTable });
+        });
     }
 })
     .post((req, res) => {
     if (req.session && req.session.loggedin == true) {
         let name = req.body.name;
-        (0, dragons_1.addDragon)(name, parseInt(req.params.id)).then((data) => {
+        let avatar = req.body.selectAvatar;
+        (0, dragons_1.addDragon)(name, parseInt(req.params.id), avatar).then((data) => {
             res.redirect(`/list/${req.params.id}`);
         });
     }

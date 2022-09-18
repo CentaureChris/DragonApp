@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getOpponents = exports.addDragon = exports.getById = exports.getAllDragons = void 0;
+exports.getAvatar = exports.getOpponents = exports.addDragon = exports.getById = exports.getAllDragons = void 0;
 const SingleDb_1 = require("../class/SingleDb");
 let db = SingleDb_1.SingleDb.getInstance();
 function getAllDragons(idUser) {
@@ -36,9 +36,9 @@ function getById(id) {
     });
 }
 exports.getById = getById;
-function addDragon(name, rider) {
+function addDragon(name, rider, avatar) {
     return new Promise((result, rej) => {
-        db.query(`INSERT INTO dragon (id, name, level, attack, defense, slip,rider,avatar) VALUES (NULL, ?, 1, 3, 2, 1,?,1);`, [name, rider]).then((data) => {
+        db.query(`INSERT INTO dragon (id, name, level, attack, defense, slip,rider,avatar) VALUES (NULL, ?, 1, 3, 2, 1,?,?);`, [name, rider, avatar]).then((data) => {
             const retObj = data;
             result(retObj);
         }).catch((err) => {
@@ -58,3 +58,14 @@ function getOpponents(id) {
     });
 }
 exports.getOpponents = getOpponents;
+function getAvatar() {
+    return new Promise((result, rej) => {
+        db.query(`SELECT * FROM avatar`, []).then((data) => {
+            const retObj = data;
+            result(retObj);
+        }).catch((err) => {
+            rej(err);
+        });
+    });
+}
+exports.getAvatar = getAvatar;
