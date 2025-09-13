@@ -8,6 +8,6 @@ export interface IDragons {
     attack: number;
     defense: number;
     slip: number;
-    objects: Array<Objects>|Array<string>|undefined;
+    objects: (Objects | string)[];
     rider: number|string|undefined;
 }
