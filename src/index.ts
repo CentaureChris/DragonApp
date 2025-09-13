@@ -11,7 +11,8 @@ var cookieSession = require("cookie-session")
 // dotenv.config();
 
 const app: Express = express();
-const port = 3000;
+const port: number = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
+const host: string = process.env.HOST || '127.0.0.1';
 
 app.set( "views", path.join( __dirname, "views" ) );
 app.set( "view engine", "ejs" );
@@ -28,8 +29,7 @@ app.use(cookieSession({
 
 app.use("/",routes);
 
-app.listen(port, () => {
-  console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
+app.listen(port, host, () => {
+  console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
 });
-
 
